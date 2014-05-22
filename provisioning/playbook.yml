@@ -1,0 +1,49 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+    - name: Update cache
+      apt: update_cache=yes
+    - name: Instalar jdk6 en su última versión
+      apt: pkg=openjdk-6-jdk state=latest install_recommends=no
+    - name: Instalar ruby
+      apt: pkg=ruby state=latest
+    - name: Instalar cabeceras ruby
+      apt: pkg=ruby-dev state=latest
+    - name: Instalar rails
+      apt: pkg=ruby-rails-3.2 state=latest
+#    - name: Instalar curl
+#      apt: pkg=curl state=latest
+    # RVM script will issue and error code despite a successful install, hence the suppression of errors.
+#    - name: Ruby | Install RVM (and suppress fail)
+#      shell: curl -L https://get.rvm.io | bash -s stable --quiet-curl --auto-dotfiles --ruby=2.1.0 --rails creates=/home/vagrant/.rvm
+#      tags: ruby
+#      ignore_errors: true
+#    - name: Ruby | Add RVM to bash profile
+#      lineinfile:
+#        dest=/home/vagrant/.bashrc
+#        state=present
+#        line='[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"'
+#      tags: ruby
+#    - name: Install rails
+#      gem: name=rails state=latest
+    - name: Instalar libxml2 (requerido por blacklight)
+      apt: pkg=libxml2 state=latest
+    - name: Instalar libxml2-dev (requerido por blacklight)
+      apt: pkg=libxml2-dev state=latest
+    - name: Instalar libxslt1-dev (requerido por blacklight)
+      apt: pkg=libxslt1-dev state=latest
+    - name: Instalar libsqlite3-dev (requerido por blacklight)
+      apt: pkg=libsqlite3-dev state=latest
+    - name: Instalar git (requerido por nokogiri)
+      apt: pkg=git state=latest
+    - name: Añadir repo para nodejs (requerido por blacklight)
+      apt_repository: repo='deb http://ftp.us.debian.org/debian wheezy-backports main' state=present
+    - name: Update cache
+      apt: update_cache=yes
+    - name: Instalar nodejs (requerido por blacklight)
+      apt: pkg=nodejs state=latest
+    - name: Instalar mysql (para importar datos de mysql en solr)
+      apt: pkg=mysql-client-5.5 state=latest
+    - name: Instalar mysql (para importar datos de mysql en solr)
+      apt: pkg=mysql-server-5.5 state=latest
